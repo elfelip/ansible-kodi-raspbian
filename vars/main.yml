@@ -1,2 +1,5 @@
 ---
 # vars file for kodi
+kodi_packages:
+  - kodi
+  - policykit-1
