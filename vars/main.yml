@@ -1,5 +1,9 @@
 ---
 # vars file for kodi
 kodi_packages:
+#  - libraw-bin
   - kodi
   - policykit-1
+  - kodi-game-libretro
+#  - kodi-imagedecoder-raw
+#  - kodi-repository-kodi
