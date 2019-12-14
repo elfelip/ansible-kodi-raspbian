@@ -11,6 +11,12 @@
     repo: deb http://pipplware.pplware.pt/pipplware/dists/stretch/main/binary /
     state: present
 
+- name: Install prereq packages
+  apt: 
+    name: "{{ kodi_prereq_packages }}" 
+    update_cache: yes
+    cache_valid_time: 600
+
 - name: Install packages
   apt: 
     name: "{{ kodi_packages }}" 
@@ -30,7 +36,9 @@
     line: 'start_x=1'
 
 - name: Add groups
-  group: name={{ item }} state=present
+  group: 
+    name: "{{ item }}"
+    state: present
   with_items:
     - audio
     - video
@@ -38,11 +46,12 @@
     - dialout
     - plugdev
     - tty
+    - irc
 
 - name: Add groups to user pi
   user:
     name: pi
-    groups: audio,video,input,dialout,plugdev,tty
+    groups: audio,video,input,dialout,plugdev,tty,irc
     append: yes
 
 - name: Add udev rules
@@ -65,6 +74,24 @@
   copy:
     src: etc/systemd/system/
     dest: /etc/systemd/system/
+
+- name: Configure lircd
+  copy:
+    src: /etc/lirc/lircd.conf.dist
+    dest: /etc/lirc/lircd.conf
+    remote_src: yes
+
+- name: Configure lircd options
+  copy:
+    src: /etc/lirc/lirc_options.conf.dist
+    dest: /etc/lirc/lirc_options.conf
+    remote_src: yes
+
+- name: Enable lircd service
+  systemd:
+    name: lircd
+    state: started
+    enabled: true
 
 - name: Enable kodi service
   systemd:

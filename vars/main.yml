@@ -1,5 +1,8 @@
 ---
 # vars file for kodi
+kodi_prereq_packages:
+  - smbclient
+  - lirc
 kodi_packages:
 #  - libraw-bin
   - kodi
